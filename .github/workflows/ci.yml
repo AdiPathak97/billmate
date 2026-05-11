@@ -109,6 +109,9 @@ jobs:
       - name: Set lowercase repo name
         run: echo "REPO_LOWER=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
       - name: Build and push API image
         uses: docker/build-push-action@v5
         with:
@@ -116,8 +119,8 @@ jobs:
           file: apps/api/Dockerfile
           push: true
           tags: ghcr.io/${{ env.REPO_LOWER }}/api:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ env.REPO_LOWER }}/api:cache
+          cache-to: type=registry,ref=ghcr.io/${{ env.REPO_LOWER }}/api:cache,mode=max
 
       - name: Build and push Web image
         uses: docker/build-push-action@v5
@@ -126,5 +129,5 @@ jobs:
           file: apps/web/Dockerfile
           push: true
           tags: ghcr.io/${{ env.REPO_LOWER }}/web:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ env.REPO_LOWER }}/web:cache
+          cache-to: type=registry,ref=ghcr.io/${{ env.REPO_LOWER }}/web:cache,mode=max
