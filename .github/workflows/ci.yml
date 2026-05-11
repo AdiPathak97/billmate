@@ -59,7 +59,7 @@ jobs:
         run: npm run build --workspace=packages/shared
 
       - name: Run tests
-        run: npm test --workspace=apps/api --workspace=packages/shared
+        run: npm test --workspace=apps/api --workspace=packages/shared --workspace=apps/web -- --passWithNoTests
 
   docker:
     name: Docker Build
