@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: '20.14.0'  # pinned, not floating
+  NODE_VERSION: '24.15.0'  # pinned, not floating
 
 jobs:
   lint-and-test:

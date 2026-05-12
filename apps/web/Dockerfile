@@ -1,5 +1,5 @@
 # ─── Stage 1: Dependencies ───────────────────────────────────────────────────
-FROM node:20-alpine AS deps
+FROM node:24.15.0-alpine AS deps
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY apps/web/package.json ./apps/web/
 RUN npm ci
 
 # ─── Stage 2: Builder ────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:24.15.0-alpine AS builder
 
 WORKDIR /app
 
@@ -25,7 +25,7 @@ RUN npm run build --workspace=packages/shared
 RUN npm run build --workspace=apps/web
 
 # ─── Stage 3: Runner ─────────────────────────────────────────────────────────
-FROM node:20-alpine AS runner
+FROM node:24.15.0-alpine AS runner
 
 WORKDIR /app
 
