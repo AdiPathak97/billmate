@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY packages/shared/ ./packages/shared/
 COPY apps/web/ ./apps/web/
-COPY turbo.json package.json ./
+COPY turbo.json package.json package-lock.json ./
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
