@@ -12,13 +12,17 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "10.0.1",
     "eslint": "10.3.0",
     "eslint-config-prettier": "^10.1.5",
     "globals": "^16.2.0",
+    "lefthook": "^2.1.6",
     "prettier": "^3.3.0",
     "turbo": "^2.0.0",
     "typescript-eslint": "^8.59.2"
