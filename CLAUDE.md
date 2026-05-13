@@ -1,3 +1,6 @@
+# Import universal agent rules first
+@AGENTS.md
+
 # BillMate — Claude Code Context
 
 ## What this project is
@@ -21,6 +24,7 @@ billmate/
 - **Backend**: Node.js 24.15.0, Express 4, TypeScript
 - **Database**: MongoDB 7 via Mongoose 9.1.6
 - **Shared**: TypeScript types + GST utilities in packages/shared
+- **API layer**: tRPC (business logic, Phase 2+) + Express REST (auth routes only)
 - **Monorepo**: Turborepo + npm workspaces
 - **DevOps**: Docker (multi-stage builds), GitHub Actions CI/CD, GHCR
 
@@ -29,7 +33,9 @@ billmate/
 - GST calculation (`calculateTaxSummary`) runs on BOTH frontend (live preview) and backend (before persisting). The backend result is authoritative.
 - Every MongoDB document has an `ownerId` field — the app is single-tenant in v1 but architected for multi-tenancy.
 - Invoice stores a **snapshot** of the customer at creation time, not just a reference. This is intentional — historical invoices must not be affected by future customer edits.
-- Demo user (`isDemo: true`) has hard server-side limits: 10 invoices, 5 customers, 5 PDF downloads. These are enforced in middleware, not just the frontend.
+- Demo user (`isDemo: true`) has hard server-side limits: 10 invoices, 5 customers, 5 PDF downloads. These are enforced in tRPC procedure middleware (Phase 4+), not Express middleware — except auth which uses the `authenticate` Express middleware.
+- **Hybrid API**: auth is plain Express REST (`/api/auth/*`); all business logic (customers, invoices, business profile) is tRPC (`/trpc/*`). Never add REST routes for business logic — use tRPC procedures.
+- tRPC `AppRouter` type is exported from `apps/api/src/router/index.ts` and imported type-only in `apps/web/src/lib/trpc.ts`. No runtime code crosses the boundary — only TypeScript inference.
 
 ## GST business logic (important — get this right)
 - **Intrastate** (seller state code = buyer state code) → CGST + SGST, split equally
@@ -94,7 +100,7 @@ docker buildx build --file apps/web/Dockerfile --tag billmate/web:local --no-cac
 - **Branches**: feature branches off `main`, PRs required
 - **TypeScript**: strict mode, no `any` without comment justification
 - **Tests**: test files in `src/__tests__/`, named `*.test.ts` or `*.test.tsx`
-- **API responses**: always use `ApiSuccess<T>` or `ApiError` shape from `@billmate/shared`
+- **API responses**: auth REST routes use `ApiSuccess<T>` / `ApiError` from `@billmate/shared`. tRPC routes throw `TRPCError` — never wrap tRPC responses in `ApiSuccess`.
 - **Error handling**: throw `AppError` (from `apps/api/src/middleware/errorHandler.ts`) for known errors; never let unknown errors leak to the client
 
 ## Environment variables

@@ -10,8 +10,9 @@ Live demo: _coming soon_
 
 | Layer | Technology |
 |---|---|
-| Frontend | Next.js 14 (App Router), Tailwind CSS, TypeScript |
-| Backend | Node.js, Express, TypeScript |
+| Frontend | Next.js 16.2.6 (App Router), Tailwind CSS, TypeScript |
+| Backend | Node.js 24.15.0, Express, TypeScript |
+| API layer | tRPC (business logic) + Express REST (auth) |
 | Database | MongoDB (Mongoose) |
 | Shared | TypeScript types + GST calculation logic |
 | DevOps | Docker, GitHub Actions |
@@ -26,7 +27,7 @@ Monorepo managed with [Turborepo](https://turbo.build) and npm workspaces.
 billmate/
 ├── apps/
 │   ├── web/          Next.js frontend
-│   └── api/          Express REST API
+│   └── api/          Express API (REST for auth, tRPC for business logic)
 ├── packages/
 │   └── shared/       Shared TypeScript types and GST utilities
 ├── docker-compose.yml
@@ -39,7 +40,7 @@ billmate/
 ## Getting Started
 
 ### Prerequisites
-- Node.js 20+
+- Node.js 24.15.0 (matches Dockerfiles and CI)
 - Docker + Docker Compose
 
 ### Local Development
