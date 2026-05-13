@@ -1,3 +1,6 @@
+output:
+  - failure
+
 pre-commit:
   commands:
     format:
@@ -19,4 +22,4 @@ pre-commit:
 commit-msg:
   commands:
     commitlint:
-      run: npx --no -- commitlint --edit {1}
+      run: npx commitlint --edit {1}
