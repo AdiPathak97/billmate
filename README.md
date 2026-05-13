@@ -46,27 +46,36 @@ billmate/
 ### Local Development
 
 1. Clone the repo and install dependencies:
+
 ```bash
 git clone https://github.com/your-username/billmate.git
 cd billmate
 npm install
 ```
 
-2. Set up environment variables:
+2. Install git hooks (one-time, required):
+
+```bash
+npx lefthook install
+```
+
+3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env and fill in JWT secrets
 ```
 
-3. Start all services:
+4. Start all services:
+
 ```bash
 docker compose up --build
 ```
 
-| Service | URL |
-|---|---|
-| Frontend | http://localhost:3000 |
-| API | http://localhost:4000 |
+| Service      | URL                              |
+| ------------ | -------------------------------- |
+| Frontend     | http://localhost:3000            |
+| API          | http://localhost:4000            |
 | Health check | http://localhost:4000/api/health |
 
 ---
@@ -109,6 +118,22 @@ The shared package (`packages/shared`) contains all GST calculation logic:
 - Financial year detection for invoice numbering (default FY start: April)
 
 This logic runs on both frontend (live preview) and backend (before persisting) — single source of truth.
+
+---
+
+## Commit Conventions
+
+This repo uses [Conventional Commits](https://www.conventionalcommits.org/), enforced by `commitlint` on every commit:
+
+```
+feat: add customer search
+fix: correct IGST calculation for interstate invoices
+chore: upgrade dependencies
+test: add unit tests for GST utils
+refactor: extract invoice number generator
+```
+
+Pre-commit hooks (via [Lefthook](https://lefthook.dev)) also auto-format staged files with Prettier and run ESLint before every commit. Full TypeScript type-checking runs across all workspaces to catch cross-package type errors before they land.
 
 ---
 

@@ -1,0 +1,22 @@
+pre-commit:
+  commands:
+    format:
+      priority: 1
+      glob: "*.{ts,tsx,js,jsx,json,md}"
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+
+    lint:
+      priority: 1
+      glob: "*.{ts,tsx,js,jsx}"
+      run: npx eslint --fix {staged_files}
+      stage_fixed: true
+
+    typecheck:
+      priority: 2
+      run: npx turbo run typecheck
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx --no -- commitlint --edit {1}
