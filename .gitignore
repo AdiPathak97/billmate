@@ -37,3 +37,6 @@ apps/api/uploads/
 
 # Coverage
 coverage/
+
+# AI agents
+.claude
